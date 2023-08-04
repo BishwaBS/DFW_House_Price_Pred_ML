@@ -1,0 +1,10 @@
+flask
+gunicorn
+Jinja2
+MarkupSafe
+numpy
+scipy
+scikit-learn
+matplotlib
+pandas
+

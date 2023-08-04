@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html >
+<!--From https://codepen.io/frytyler/pen/EGdtg-->
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width">
+  <title>House Price Prediction</title>
+  <link href='https://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Arimo' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Hind:300' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<style>
+
+.left{
+  height: 300%;
+  width: 20%;
+  left:100px;
+  top:100px;
+  position: absolute;
+  overflow-x: hidden;
+  padding-top: 20px;
+}
+
+ol
+{
+    margin:0px;
+    padding-left:20px;
+}
+
+ol li
+{
+    margin: 0px;
+    padding: 10px;
+    text-indent: -0.5em;
+    text-align: left;
+    margin-left: 1em;
+}
+
+a:link {
+  color: green;
+  background-color: transparent;
+  text-decoration: none;
+}
+
+a:visited {
+  color: pink;
+  background-color: transparent;
+  text-decoration: none;
+}
+
+.dropdown {
+/* width: 200px; */
+left:400px;
+top:50px;
+position: absolute;
+margin-top: 100px;
+
+margin: 200px;
+}
+
+#imageContainer {
+text-align: center;
+margin-top: 10px;
+
+margin-left: 700px;
+
+}
+
+#selectedImage {
+max-width: 500px;
+max-height: 400px;
+}
+
+
+</style>
+
+</head>
+
+<script>
+  function showImage() {
+    const dropdown = document.getElementById('imageDropdown');
+    const imageContainer = document.getElementById('selectedImage');
+
+    if (dropdown.value === 'rmse') {
+      imageContainer.src = '../static/images/rmse.png';
+    } else if (dropdown.value === 'nrmse') {
+      imageContainer.src = '../static/images/nrmse.png';
+    } else if (dropdown.value === 'boxplot') {
+      imageContainer.src = '../static/images/boxplot.png';
+
+    } else {
+      imageContainer.src = '';
+    }
+  }
+</script>
+
+
+<body>
+
+  <h1>Predict House Prices in DFW Area</h1>
+
+  <div class="left" >
+
+    <!-- Main Input For Receiving Query to our ML -->
+    <form action="{{ url_for('predict')}} "method="post" >
+
+        <input type="text" name="size" placeholder="House Area (sqft) (range 100 - 10000)" required="required" />
+        <input type="text" name="bed" placeholder="No. of beds (range 1 - 10)" required="required" />
+        <input type="text" name="bath" placeholder="No. of bathrooms (range 1 - 10)" required="required" />
+        <input type="text" name="park" placeholder="Distance_2_park (range 0 - 10 miles)" required="required" />
+        <input type="text" name="school" placeholder="Distance_2_school (range 0 - 10 miles)" required="required" />
+        <input type="text" name="hospital" placeholder="Distance_2_hospital (range 0 - 20 miles)" required="required" />
+
+        <button type="submit"  class="btn btn-primary btn-block btn-large">Predict</button>
+        <br>
+        <br>
+
+        <h1 style="font-size:2vw;color:white">{{prediction_text}}</h1>
+        <h1 style="font-size:3vw; color:green">{{prediction_val}}</h1>
+    </form>
+  </div>
+
+  <div class="dropdown">
+      <select id="imageDropdown" onchange="showImage()">
+          <option value="">Select an option</option>
+          <option value="rmse">RMSE_barchart</option>
+          <option value="nrmse">nRMSE_barchart</option>
+          <option value="boxplot">boxplot_outlier_removed</option>
+      </select>
+  </div>
+
+  <div id="imageContainer">
+    <img id="selectedImage" src="" alt="Selected Image">
+  </div>
+
+</body>
+</html>
